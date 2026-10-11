@@ -1,10 +1,10 @@
-# interview prepAI 🚀
+# interview prepAI 
 
 An end-to-end AI career intelligence and interview preparation platform. It evaluates candidate resumes and profiles against target job descriptions to generate 30-day preparation roadmaps, targeted interview questions, and compiles ATS-optimized single-page PDF resumes using Puppeteer and Google Gemini.
 
 ---
 
-## ✨ Features
+##  Features
 
 - **Profile & Job Description Match Scoring:** Instant evaluation calculating match percentage and identifying key competencies.
 - **Exhaustive Skill Gap Identification:** Pinpoints missing technical, architectural, and framework skills categorized by severity (High, Medium, Low).
@@ -15,7 +15,7 @@ An end-to-end AI career intelligence and interview preparation platform. It eval
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 - **React 19**
@@ -37,7 +37,7 @@ An end-to-end AI career intelligence and interview preparation platform. It eval
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js (v18+)
