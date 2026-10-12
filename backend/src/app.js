@@ -36,6 +36,15 @@ app.use(async (req, res, next) => {
 })
 
 /* require all the routes here*/
+app.get("/api/health", (req, res) => {
+    res.json({
+        status: "ok",
+        database: "connected",
+        hasMongoUri: !!process.env.MONGO_URI,
+        hasJwtSecret: !!process.env.JWT_SECRET
+    })
+})
+
 const authRouter=require("./routes/auth.routes")
 const interviewRouter=require("./routes/interview.routes")
 
