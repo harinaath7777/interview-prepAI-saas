@@ -1,7 +1,10 @@
 const express=require("express")
 const cookieParser=require("cookie-parser")
 const cors=require("cors")
+const connectdb=require("./db/db")
 const app=express()
+
+app.set("trust proxy", 1)
 
 app.use(express.json())
 app.use(cookieParser())
@@ -21,6 +24,17 @@ app.use(cors({
     credentials: true,
     exposedHeaders: ["Content-Disposition"]
 }))
+app.use(async (req, res, next) => {
+    try {
+        await connectdb()
+        next()
+    } catch (err) {
+        return res.status(500).json({
+            message: "Database connection failed. Please ensure MONGO_URI is configured correctly in Vercel."
+        })
+    }
+})
+
 /* require all the routes here*/
 const authRouter=require("./routes/auth.routes")
 const interviewRouter=require("./routes/interview.routes")
