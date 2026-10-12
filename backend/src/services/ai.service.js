@@ -1,6 +1,5 @@
 const { GoogleGenAI } = require("@google/genai")
 const { z } = require("zod")
-const puppeteer = require("puppeteer")
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY || process.env.API_KEY || process.env.GEMINI_API_KEY
@@ -117,6 +116,7 @@ STRICT MANDATORY REQUIREMENTS:
 }
 
 async function generatePdfFromHtml(htmlContent) {
+    const puppeteer = require("puppeteer")
     const browser = await puppeteer.launch({
         headless: true,
         args: [

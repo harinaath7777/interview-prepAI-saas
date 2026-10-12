@@ -24,25 +24,27 @@ app.use(cors({
     credentials: true,
     exposedHeaders: ["Content-Disposition"]
 }))
+app.get("/api/health", (req, res) => {
+    const mongoose = require("mongoose")
+    const states = ["disconnected", "connected", "connecting", "disconnecting"]
+    res.json({
+        status: "ok",
+        database: states[mongoose.connection.readyState] || "unknown",
+        hasMongoUri: !!process.env.MONGO_URI,
+        hasJwtSecret: !!process.env.JWT_SECRET,
+        nodeEnv: process.env.NODE_ENV || "development"
+    })
+})
+
 app.use(async (req, res, next) => {
     try {
         await connectdb()
         next()
     } catch (err) {
         return res.status(500).json({
-            message: "Database connection failed. Please ensure MONGO_URI is configured correctly in Vercel."
+            message: "Database connection failed: " + (err.message || "Please ensure MONGO_URI is configured correctly in Vercel.")
         })
     }
-})
-
-/* require all the routes here*/
-app.get("/api/health", (req, res) => {
-    res.json({
-        status: "ok",
-        database: "connected",
-        hasMongoUri: !!process.env.MONGO_URI,
-        hasJwtSecret: !!process.env.JWT_SECRET
-    })
 })
 
 const authRouter=require("./routes/auth.routes")
