@@ -1,3 +1,4 @@
+require("dotenv").config()
 const express=require("express")
 const cookieParser=require("cookie-parser")
 const cors=require("cors")
@@ -24,7 +25,8 @@ app.use(cors({
     credentials: true,
     exposedHeaders: ["Content-Disposition"]
 }))
-app.get("/api/health", (req, res) => {
+
+const healthHandler = (req, res) => {
     const mongoose = require("mongoose")
     const states = ["disconnected", "connected", "connecting", "disconnecting"]
     res.json({
@@ -34,7 +36,11 @@ app.get("/api/health", (req, res) => {
         hasJwtSecret: !!process.env.JWT_SECRET,
         nodeEnv: process.env.NODE_ENV || "development"
     })
-})
+}
+
+app.get("/api/health", healthHandler)
+app.get("/health", healthHandler)
+app.get("/", (req, res) => res.json({ message: "interview prepAI backend API is running" }))
 
 app.use(async (req, res, next) => {
     try {
@@ -50,7 +56,11 @@ app.use(async (req, res, next) => {
 const authRouter=require("./routes/auth.routes")
 const interviewRouter=require("./routes/interview.routes")
 
-/*use all the routes here*/
-app.use("/api/auth",authRouter)
-app.use("/api/interview",interviewRouter)
+/*use all the routes here - mount both with and without /api prefix for Vercel service rewrite flexibility*/
+app.use("/api/auth", authRouter)
+app.use("/auth", authRouter)
+
+app.use("/api/interview", interviewRouter)
+app.use("/interview", interviewRouter)
+
 module.exports=app

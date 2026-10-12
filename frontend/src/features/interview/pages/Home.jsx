@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react'
 import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
+import { useAuth } from '../../auth/hooks/useAuth.js'
 import { useNavigate } from 'react-router'
 
 const Home = () => {
+    const { user, handleLogout } = useAuth()
     const { loading, generateReport, reports } = useInterview()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
@@ -56,12 +58,44 @@ const Home = () => {
     return (
         <div className='home-page'>
 
-            {/* Page Header */}
-            <header className='page-header'>
-                <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.8rem", padding: "0.4rem 0.9rem", background: "rgba(255, 45, 120, 0.1)", borderRadius: "999px", border: "1px solid rgba(255, 45, 120, 0.25)" }}>
+            {/* Top Navigation Bar with User and Logout */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", maxWidth: "1100px", padding: "1.2rem 1.5rem 0", boxSizing: "border-box" }}>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem", padding: "0.4rem 0.9rem", background: "rgba(255, 45, 120, 0.1)", borderRadius: "999px", border: "1px solid rgba(255, 45, 120, 0.25)" }}>
                     <img src="/favicon.svg" alt="interview prepAI" style={{ width: "20px", height: "20px" }} />
                     <span style={{ fontSize: "0.85rem", fontWeight: "600", letterSpacing: "0.04em", color: "#ff6b9d" }}>interview prepAI</span>
                 </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                    {user?.username && (
+                        <span style={{ fontSize: "0.9rem", color: "#a0aec0" }}>
+                            Welcome, <strong style={{ color: "#fff" }}>{user.username}</strong>
+                        </span>
+                    )}
+                    <button 
+                        onClick={async () => {
+                            await handleLogout();
+                            navigate("/login");
+                        }}
+                        style={{
+                            background: "rgba(255, 255, 255, 0.08)",
+                            color: "#e2e8f0",
+                            border: "1px solid rgba(255, 255, 255, 0.15)",
+                            borderRadius: "8px",
+                            padding: "0.45rem 1rem",
+                            fontSize: "0.85rem",
+                            fontWeight: "500",
+                            cursor: "pointer",
+                            transition: "all 0.2s ease"
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(239, 68, 68, 0.25)"; e.currentTarget.style.borderColor = "rgba(239, 68, 68, 0.5)"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)"; e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.15)"; }}
+                    >
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+
+            {/* Page Header */}
+            <header className='page-header'>
                 <h1>Create Your Custom <span className='highlight'>Interview Plan</span></h1>
                 <p>Let our AI analyze the job requirements and your unique profile to build a winning strategy.</p>
             </header>
